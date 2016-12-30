@@ -1,0 +1,30 @@
+{
+  "name": "fscopy",
+  "version": "0.0.1",
+  "description": "File System Copy Utility",
+  "main": "index.js",
+  "scripts": {
+    "test": "karma start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/maximandrewz/fscopy.git"
+  },
+  "keywords": [
+    "file",
+    "system",
+    "copy",
+    "utility"
+  ],
+  "author": "Maxim Andrews (www.maximandrews.com)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/maximandrewz/fscopy/issues"
+  },
+  "homepage": "https://github.com/maximandrewz/fscopy#readme",
+  "devDependencies": {
+    "jasmine-core": "^2.5.2",
+    "karma": "^1.3.0",
+    "karma-jasmine": "^1.1.0"
+  }
+}
