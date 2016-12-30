@@ -1,3 +1,5 @@
+const path = require('path');
+
 module.exports = exports = function copyFileSystem(pathname, srcFS, dstFS, options) {
   options = options || {};
   
@@ -7,21 +9,8 @@ module.exports = exports = function copyFileSystem(pathname, srcFS, dstFS, optio
     console.log(pathname);
   }
 
-  try {
-    srcStat = srcFS.statSync(pathname);
-  } catch (e) {
-    if (options.debug > 1) {
-      throw e;
-    }
-  }
-
-  try {
-    dstStat = dstFS.statSync(pathname);
-  } catch (e) {
-    if (options.debug > 1) {
-      throw e;
-    }
-  }
+  srcStat = filestat(pathname, srcFS, options.debug);
+  dstStat = filestat(pathname, dstFS, options.debug);
 
   if (!srcStat || !srcStat.isFile() && !srcStat.isDirectory() || dstStat && !options.overwrite) {
     return false;
@@ -40,15 +29,15 @@ module.exports = exports = function copyFileSystem(pathname, srcFS, dstFS, optio
 
   dstFS.mkdirSync(pathname, srcStat.mode);
 
-  copydircontent(pathname, srcFS, dstFS);
+  copydircontent(pathname, srcFS, dstFS, options);
 }
 
-function copydircontent(pathname, srcFS, dstFS) {
+function copydircontent(pathname, srcFS, dstFS, options) {
   content = srcFS.readdirSync(pathname);
 
   if (Array.isArray(content)) {
     content.forEach(elm => {
-      copyFileSystem(path.join(pathname, elm), srcFS, dstFS);
+      copyFileSystem(path.join(pathname, elm), srcFS, dstFS, options);
     });
   }
 }
@@ -59,4 +48,18 @@ function remove(pathname, stat, fs) {
   } else if (stat.isFile()) {
     fs.unlinkSync(pathname);
   }
+}
+
+function filestat(pathname, fs, debug) {
+  let stat;
+
+  try {
+    stat = fs.statSync(pathname);
+  } catch (e) {
+    if (debug > 1) {
+      throw e;
+    }
+  }
+
+  return stat;
 }
