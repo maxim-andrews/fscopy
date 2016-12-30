@@ -1,7 +1,7 @@
 {
   "name": "fscopy",
   "version": "0.0.1",
-  "description": "File System Copy Utility",
+  "description": "Simple File System Copy Utility",
   "main": "index.js",
   "scripts": {
     "test": "karma start"
