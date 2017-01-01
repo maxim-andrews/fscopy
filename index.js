@@ -1,18 +1,19 @@
 const path = require('path');
 
-module.exports = exports = function copyFileSystem(pathname, srcFS, dstFS, options) {
-  options = options || {};
-  
-  let srcStat, dstStat, content;
+function CopyFileSystem(options) {
+  this.options = options || {};
+}
 
-  if (options.debug) {
-    console.log(pathname);
-  }
+CopyFileSystem.prototype.copy = function(pathname, srcFS, dstFS) {
+  let me = this;
+  let srcStat, dstStat;
 
-  srcStat = filestat(pathname, srcFS, options.debug);
-  dstStat = filestat(pathname, dstFS, options.debug);
+  me.debug(pathname);
 
-  if (!srcStat || !srcStat.isFile() && !srcStat.isDirectory() || dstStat && !options.overwrite) {
+  srcStat = filestat(pathname, srcFS, me.options.debug);
+  dstStat = filestat(pathname, dstFS, me.options.debug);
+
+  if (!srcStat || !srcStat.isFile() && !srcStat.isDirectory() || dstStat && !me.options.overwrite) {
     return false;
   }
 
@@ -29,20 +30,29 @@ module.exports = exports = function copyFileSystem(pathname, srcFS, dstFS, optio
 
   dstFS.mkdirSync(pathname, srcStat.mode);
 
-  copydircontent(pathname, srcFS, dstFS, options);
+  me.copydircontent(pathname, srcFS, dstFS);
 }
 
-function copydircontent(pathname, srcFS, dstFS, options) {
-  content = srcFS.readdirSync(pathname);
+CopyFileSystem.prototype.debug = function(string) {
+  let me = this;
+
+  if (me.options.debug) {
+    console.log(string);
+  }
+}
+
+CopyFileSystem.prototype.copydircontent = function(pathname, srcFS, dstFS) {
+  let me = this;
+  let content = srcFS.readdirSync(pathname);
 
   if (Array.isArray(content)) {
     content.forEach(elm => {
-      copyFileSystem(path.join(pathname, elm), srcFS, dstFS, options);
+      me.copy(path.join(pathname, elm), srcFS, dstFS);
     });
   }
 }
 
-function remove(pathname, stat, fs) {
+CopyFileSystem.prototype.remove = function(pathname, stat, fs) {
   if (stat.isDirectory()) {
     fs.rmdirSync(pathname);
   } else if (stat.isFile()) {
@@ -50,16 +60,18 @@ function remove(pathname, stat, fs) {
   }
 }
 
-function filestat(pathname, fs, debug) {
-  let stat;
+CopyFileSystem.prototype.filestat = function(pathname, fs) {
+  let stats;
 
   try {
-    stat = fs.statSync(pathname);
+    stats = fs.statSync(pathname);
   } catch (e) {
-    if (debug > 1) {
+    if (this.options.debug > 1) {
       throw e;
     }
   }
 
-  return stat;
+  return stats;
 }
+
+module.exports = exports = CopyFileSystem;
