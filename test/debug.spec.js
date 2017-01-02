@@ -16,7 +16,7 @@ describe('debug method unit tests', () => {
 
   it('debug should be off and console.log should not be called at all', () => {
     fscopy = new CopyFileSystem();
-    expect(fscopy.options.debug).to.be.undefined;
+    expect(fscopy.options.debug).to.equal(0);
     chai.spy.on(console, 'log');
     fscopy.debug('This is test output string');
     expect(console.log).not.have.been.called();
@@ -27,7 +27,7 @@ describe('debug method unit tests', () => {
     let output = console.log;
     console.log = function() {};
     fscopy = new CopyFileSystem({ debug: 1 });
-    expect(fscopy.options.debug).not.be.undefined;
+    expect(fscopy.options.debug).not.equal(0);
     chai.spy.on(console, 'log');
     fscopy.debug('This is test output string');
     expect(console.log).to.have.been.called.once;

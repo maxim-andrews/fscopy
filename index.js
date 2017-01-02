@@ -1,7 +1,11 @@
 const path = require('path');
 
 function CopyFileSystem(options) {
-  this.options = options || {};
+  let me = this;
+
+  me.options = options || {};
+  me.options.debug = me.options.debug || 0;
+  me.options.overwrite = me.options.overwrite || false;
 }
 
 CopyFileSystem.prototype.copy = function(pathname, srcFS, dstFS) {
