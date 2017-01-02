@@ -1,14 +1,13 @@
 const fs = require('fs');
 const path = require('path');
 const chai = require('chai');
-const memfs = require('memory-fs');
 const expect = chai.expect
 
 const CopyFileSystem = require('../index');
 
 var fscopy;
 
-describe('filestat function unit tests', () => {
+describe('filestat method unit tests', () => {
   beforeEach(() => {
     fscopy = new CopyFileSystem();
   });

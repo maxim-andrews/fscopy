@@ -17,8 +17,8 @@ CopyFileSystem.prototype.copy = function(pathname, srcFS, dstFS) {
     return false;
   }
 
-  if (dstStat) {
-    remove(pathname, dstStat, dstFS);
+  if (dstStat && dstStat.isFile()) {
+    me.remove(pathname, dstFS, dstStat);
   }
 
   if (!srcStat.isDirectory()) {
@@ -28,7 +28,9 @@ CopyFileSystem.prototype.copy = function(pathname, srcFS, dstFS) {
     });
   }
 
-  dstFS.mkdirSync(pathname, srcStat.mode);
+  if (!dstStat) {
+    dstFS.mkdirSync(pathname, srcStat.mode);
+  }
 
   me.copydircontent(pathname, srcFS, dstFS);
 }
@@ -52,7 +54,11 @@ CopyFileSystem.prototype.copydircontent = function(pathname, srcFS, dstFS) {
   }
 }
 
-CopyFileSystem.prototype.remove = function(pathname, stat, fs) {
+CopyFileSystem.prototype.remove = function(pathname, fs, stat) {
+  if (!stat) {
+    stat = this.filestat(pathname, fs);
+  }
+
   if (stat.isDirectory()) {
     fs.rmdirSync(pathname);
   } else if (stat.isFile()) {
