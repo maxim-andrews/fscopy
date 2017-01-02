@@ -1,6 +1,4 @@
-# fscopy
-[![Build Status](https://travis-ci.org/maximandrewz/fscopy.svg?branch=master)](https://travis-ci.org/maximandrewz/fscopy)
-
+# fscopy [![Build Status](https://travis-ci.org/maximandrewz/fscopy.svg?branch=master)](https://travis-ci.org/maximandrewz/fscopy)
 File System Copy Utility
 
 ### Instalation
