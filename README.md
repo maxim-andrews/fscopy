@@ -11,5 +11,8 @@ or
 ## Usage
 Comming soon :)
 
-## Improvments
+## Versioning
+According to [semver.org](http://semver.org)
+
+## Improvements
 You are welcome to submit issues and feature requests
