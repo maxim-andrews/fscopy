@@ -6,7 +6,7 @@ var fscopy;
 
 describe('constructor unit tests', () => {
 
-  it('Should check that debug is 0 and overwrite is false when options not passed to the constructor', () => {
+  it('Should check that `options` property is object debug is 0 and overwrite is false when options aren\'t passed', () => {
     fscopy = new CopyFileSystem();
     expect(fscopy.options.debug).to.equal(0);
     expect(fscopy.options.overwrite).to.be.false;

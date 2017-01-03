@@ -14,10 +14,18 @@ CopyFileSystem.prototype.copy = function(pathname, srcFS, dstFS) {
 
   me.debug(pathname);
 
-  srcStat = filestat(pathname, srcFS, me.options.debug);
-  dstStat = filestat(pathname, dstFS, me.options.debug);
+  srcStat = me.filestat(pathname, srcFS, me.options.debug);
+  dstStat = me.filestat(pathname, dstFS, me.options.debug);
 
-  if (!srcStat || !srcStat.isFile() && !srcStat.isDirectory() || dstStat && !me.options.overwrite) {
+  if (!srcStat) {
+    return false;
+  }
+
+  if (!srcStat.isFile() && !srcStat.isDirectory()) {
+    return false;
+  }
+
+  if (srcStat.isFile() && dstStat && !me.options.overwrite) {
     return false;
   }
 
@@ -26,6 +34,8 @@ CopyFileSystem.prototype.copy = function(pathname, srcFS, dstFS) {
   }
 
   if (!srcStat.isDirectory()) {
+    me.makefilefolder(pathname, dstFS);
+
     return dstFS.writeFileSync(pathname, srcFS.readFileSync(pathname, 'utf8'), {
       mode: srcStat.mode,
       encoding: 'utf8'
@@ -33,10 +43,18 @@ CopyFileSystem.prototype.copy = function(pathname, srcFS, dstFS) {
   }
 
   if (!dstStat) {
-    dstFS.mkdirSync(pathname, srcStat.mode);
+    dstFS.mkdirpSync(pathname, srcStat.mode);
   }
 
   me.copydircontent(pathname, srcFS, dstFS);
+}
+
+CopyFileSystem.prototype.makefilefolder = function(pathname, fs) {
+  let folder = path.dirname(pathname);
+  
+  if (folder != pathname) {
+    fs.mkdirpSync(folder);
+  }
 }
 
 CopyFileSystem.prototype.debug = function(string) {
