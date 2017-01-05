@@ -51,8 +51,9 @@ CopyFileSystem.prototype.copy = function(pathname, srcFS, dstFS) {
 
 CopyFileSystem.prototype.makefilefolder = function(pathname, fs) {
   let folder = path.dirname(pathname);
+  let parentfolder = path.dirname(folder);
   
-  if (folder != pathname) {
+  if (folder != parentfolder) {
     fs.mkdirpSync(folder);
   }
 }
@@ -100,6 +101,31 @@ CopyFileSystem.prototype.filestat = function(pathname, fs) {
   }
 
   return stats;
+}
+
+CopyFileSystem.prototype.printtree = function(pathname, fs) {
+  let me = this;
+  let content;
+  let fileCount = 0;
+
+  const stat = me.filestat(pathname, fs);
+
+  if (!stat && me.options.debug) {
+    console.log('File', pathname, 'not found.');
+  }
+
+  if (stat.isDirectory()) {
+    content = fs.readdirSync(pathname);
+
+    content.forEach(item => {
+      fileCount++;
+      me.printtree(path.join(pathname, item), fs);
+    });
+  }
+
+  if (stat.isFile() || fileCount === 0) {
+    console.log(pathname, stat.isFile() ? '- file': '- folder');
+  }
 }
 
 module.exports = exports = CopyFileSystem;
