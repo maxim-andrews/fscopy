@@ -77,9 +77,9 @@ Passing `options` to constructor is optional.
 
 `options` is generic object and can have such properties:
 
-Property `debug` - should be integer and can have value of `0`, `1` or `2` which will generate specific level of debug output. Default is 0.
+Property `debug` - should be integer and can have value of `0`, `1` or `2` which will generate specific level of debug output. Default is `0`.
 
-Property `overwrite` - should be boolean which will indicate whether overwrite files if they are exists on destination filesystem. Default is false.
+Property `overwrite` - should be boolean which will indicate whether overwrite files if they are exists on destination filesystem. Default is `false`.
 
 ## Versioning
 According to [semver.org](http://semver.org)
